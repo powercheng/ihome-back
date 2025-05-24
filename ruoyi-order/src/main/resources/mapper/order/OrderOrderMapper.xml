@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.order.mapper.OrderOrderMapper">
+    
+    <resultMap type="OrderOrder" id="OrderOrderResult">
+        <result property="id"    column="id"    />
+        <result property="estimateId"    column="estimate_id"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="customerPhone"    column="customer_phone"    />
+        <result property="customerAddress"    column="customer_address"    />
+        <result property="orderAmount"    column="order_amount"    />
+        <result property="deliveryDate"    column="delivery_date"    />
+        <result property="currentStatus"    column="current_status"    />
+        <result property="isDelivery"    column="is_delivery"    />
+        <result property="isInstall"    column="is_install"    />
+        <result property="createDate"    column="create_date"    />
+    </resultMap>
+
+    <sql id="selectOrderOrderVo">
+        select id, estimate_id, customer_name, customer_phone, customer_address, order_amount, delivery_date, current_status, is_delivery, is_install, create_date from order_order
+    </sql>
+
+    <select id="selectOrderOrderList" parameterType="OrderOrder" resultMap="OrderOrderResult">
+        <include refid="selectOrderOrderVo"/>
+        <where>  
+            <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="customerPhone != null  and customerPhone != ''"> and customer_phone = #{customerPhone}</if>
+            <if test="currentStatus != null "> and current_status = #{currentStatus}</if>
+            <if test="isDelivery != null "> and is_delivery = #{isDelivery}</if>
+            <if test="isInstall != null "> and is_install = #{isInstall}</if>
+            <if test="createDate != null "> and create_date = #{createDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectOrderOrderById" parameterType="Long" resultMap="OrderOrderResult">
+        <include refid="selectOrderOrderVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertOrderOrder" parameterType="OrderOrder">
+        insert into order_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="estimateId != null">estimate_id,</if>
+            <if test="customerName != null">customer_name,</if>
+            <if test="customerPhone != null">customer_phone,</if>
+            <if test="customerAddress != null">customer_address,</if>
+            <if test="orderAmount != null">order_amount,</if>
+            <if test="deliveryDate != null">delivery_date,</if>
+            <if test="currentStatus != null">current_status,</if>
+            <if test="isDelivery != null">is_delivery,</if>
+            <if test="isInstall != null">is_install,</if>
+            <if test="createDate != null">create_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="estimateId != null">#{estimateId},</if>
+            <if test="customerName != null">#{customerName},</if>
+            <if test="customerPhone != null">#{customerPhone},</if>
+            <if test="customerAddress != null">#{customerAddress},</if>
+            <if test="orderAmount != null">#{orderAmount},</if>
+            <if test="deliveryDate != null">#{deliveryDate},</if>
+            <if test="currentStatus != null">#{currentStatus},</if>
+            <if test="isDelivery != null">#{isDelivery},</if>
+            <if test="isInstall != null">#{isInstall},</if>
+            <if test="createDate != null">#{createDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrderOrder" parameterType="OrderOrder">
+        update order_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="estimateId != null">estimate_id = #{estimateId},</if>
+            <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="customerPhone != null">customer_phone = #{customerPhone},</if>
+            <if test="customerAddress != null">customer_address = #{customerAddress},</if>
+            <if test="orderAmount != null">order_amount = #{orderAmount},</if>
+            <if test="deliveryDate != null">delivery_date = #{deliveryDate},</if>
+            <if test="currentStatus != null">current_status = #{currentStatus},</if>
+            <if test="isDelivery != null">is_delivery = #{isDelivery},</if>
+            <if test="isInstall != null">is_install = #{isInstall},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOrderOrderById" parameterType="Long">
+        delete from order_order where id = #{id}
+    </delete>
+
+    <delete id="deleteOrderOrderByIds" parameterType="String">
+        delete from order_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

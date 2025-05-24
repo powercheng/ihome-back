@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.customer.mapper.CustomerMapper">
+    
+    <resultMap type="Customer" id="CustomerResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="company"    column="company"    />
+        <result property="phone"    column="phone"    />
+        <result property="note"    column="note"    />
+        <result property="follower"    column="follower"    />
+        <result property="designer"    column="designer"    />
+        <result property="source"    column="source"    />
+        <result property="category"    column="category"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="currentStatus"    column="current_status"    />
+    </resultMap>
+
+    <sql id="selectCustomerVo">
+        select id, name, company, phone, note, follower, designer, source, category, create_date, current_status from customer
+    </sql>
+
+    <select id="selectCustomerList" parameterType="Customer" resultMap="CustomerResult">
+        <include refid="selectCustomerVo"/>
+        <where>  
+            <if test="name != null and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="follower != null  and follower != ''"> and follower = #{follower}</if>
+            <if test="designer != null  and designer != ''"> and designer = #{designer}</if>
+            <if test="source != null  and source != ''"> and source = #{source}</if>
+            <if test="category != null  and category != ''"> and category = #{category}</if>
+            <if test="createDate != null "> and create_date = #{createDate}</if>
+            <if test="currentStatus != null "> and current_status = #{currentStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectCustomerById" parameterType="Long" resultMap="CustomerResult">
+        <include refid="selectCustomerVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCustomer" parameterType="Customer" useGeneratedKeys="true" keyProperty="id">
+        insert into customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="company != null">company,</if>
+            <if test="phone != null">phone,</if>
+            <if test="note != null">note,</if>
+            <if test="follower != null">follower,</if>
+            <if test="designer != null">designer,</if>
+            <if test="source != null">source,</if>
+            <if test="category != null">category,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="currentStatus != null">current_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="company != null">#{company},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="note != null">#{note},</if>
+            <if test="follower != null">#{follower},</if>
+            <if test="designer != null">#{designer},</if>
+            <if test="source != null">#{source},</if>
+            <if test="category != null">#{category},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="currentStatus != null">#{currentStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCustomer" parameterType="Customer">
+        update customer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="note != null">note = #{note},</if>
+            <if test="follower != null">follower = #{follower},</if>
+            <if test="designer != null">designer = #{designer},</if>
+            <if test="source != null">source = #{source},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="currentStatus != null">current_status = #{currentStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCustomerById" parameterType="Long">
+        delete from customer where id = #{id}
+    </delete>
+
+    <delete id="deleteCustomerByIds" parameterType="String">
+        delete from customer where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
