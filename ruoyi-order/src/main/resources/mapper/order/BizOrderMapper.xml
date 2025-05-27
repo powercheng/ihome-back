@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.order.mapper.BizOrderMapper">
+    
+    <resultMap type="BizOrder" id="BizOrderResult">
+        <result property="id"    column="id"    />
+        <result property="quoteId"    column="quote_id"    />
+        <result property="customerPo"    column="customer_po"    />
+        <result property="deliveryName"    column="delivery_name"    />
+        <result property="deliveryAddress"    column="delivery_address"    />
+        <result property="estimatedShipDate"    column="estimated_ship_date"    />
+        <result property="shipDate"    column="ship_date"    />
+        <result property="status"    column="status"    />
+        <result property="note"    column="note"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizOrderVo">
+        select id, quote_id, customer_po, delivery_name, delivery_address, estimated_ship_date, ship_date, status, note, create_by, create_time, update_by, update_time from biz_order
+    </sql>
+
+    <select id="selectBizOrderList" parameterType="BizOrder" resultMap="BizOrderResult">
+        <include refid="selectBizOrderVo"/>
+        <where>  
+            <if test="quoteId != null "> and quote_id = #{quoteId}</if>
+            <if test="customerPo != null  and customerPo != ''"> and customer_po = #{customerPo}</if>
+            <if test="deliveryName != null  and deliveryName != ''"> and delivery_name like concat('%', #{deliveryName}, '%')</if>
+            <if test="deliveryAddress != null  and deliveryAddress != ''"> and delivery_address = #{deliveryAddress}</if>
+            <if test="estimatedShipDate != null "> and estimated_ship_date = #{estimatedShipDate}</if>
+            <if test="shipDate != null "> and ship_date = #{shipDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="note != null  and note != ''"> and note = #{note}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizOrderById" parameterType="Long" resultMap="BizOrderResult">
+        <include refid="selectBizOrderVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBizOrder" parameterType="BizOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="quoteId != null">quote_id,</if>
+            <if test="customerPo != null and customerPo != ''">customer_po,</if>
+            <if test="deliveryName != null">delivery_name,</if>
+            <if test="deliveryAddress != null">delivery_address,</if>
+            <if test="estimatedShipDate != null">estimated_ship_date,</if>
+            <if test="shipDate != null">ship_date,</if>
+            <if test="status != null">status,</if>
+            <if test="note != null">note,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="quoteId != null">#{quoteId},</if>
+            <if test="customerPo != null and customerPo != ''">#{customerPo},</if>
+            <if test="deliveryName != null">#{deliveryName},</if>
+            <if test="deliveryAddress != null">#{deliveryAddress},</if>
+            <if test="estimatedShipDate != null">#{estimatedShipDate},</if>
+            <if test="shipDate != null">#{shipDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="note != null">#{note},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizOrder" parameterType="BizOrder">
+        update biz_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="quoteId != null">quote_id = #{quoteId},</if>
+            <if test="customerPo != null and customerPo != ''">customer_po = #{customerPo},</if>
+            <if test="deliveryName != null">delivery_name = #{deliveryName},</if>
+            <if test="deliveryAddress != null">delivery_address = #{deliveryAddress},</if>
+            <if test="estimatedShipDate != null">estimated_ship_date = #{estimatedShipDate},</if>
+            <if test="shipDate != null">ship_date = #{shipDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="note != null">note = #{note},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizOrderById" parameterType="Long">
+        delete from biz_order where id = #{id}
+    </delete>
+
+    <delete id="deleteBizOrderByIds" parameterType="String">
+        delete from biz_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
